@@ -51,7 +51,7 @@
 %\insertcode{"SetupEC2ForTorch.txt"}{Setting up server for deep learning in Torch.}
 
 \section{Introduction to Deep Learning}
-We are introducing $ReLU$ (Rectified Linear Unit) function which is often seen in deep learning literature.
+Andrew Ng is introducing $ReLU$ (Rectified Linear Unit) function which is often seen in deep learning literature as an example of the simplest choice for activation function. 
 \begin{align}
 f(x) =
 	\begin{cases}
@@ -60,11 +60,44 @@ f(x) =
 	\end{cases}
 \end{align}
 
-% TODO implement ReLU function in python, plot it and add the plotted png here
-%\begin{figure}
-%	\includegraphics[width=\linewidth]{sigmoid.png}
-%	\label{fig:sigmoid}
-%\end{figure}
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=50mm]{../plots/relu.png}
+	\caption{ReLU function}
+	\label{fig:relu}
+\end{figure}
 
+One of the major breakthroughs in NN computations was introducing $ReLU$ function instead of $Sigmoid$ function $f(x) = \frac{1}{1 + e ^{-x}}$. The advantage of $ReLU$ is that has value $0$ when $x < 0$, where $Sigmoid$ function has values that are close to $0$ and thus making the computation harder.
+Additionally, gradient of $ReLU$ function is equal to $1$ for all positive $x$'s and thus making the gradient descent runs much faster.
 
+Especially interesting in Week 1 of the course was interview with Geoffry Hinton where a lot of interesting ideas were mentioned so it would be really beneficial to watch this video again once student gain more knowledge about different models like Boltzman Machines etc.
+
+\section{Neural Network Basics}
+
+\subsection{Image representation}
+Image is represented with the 3-dimensional matrix where dimensions represent values of Red Green and Blue respectively. 3-dimensional matrix is usually squeezed into 1-dimensional vector and this is what we are considering to be our $x$ in terms of image classification models.
+
+\subsection{Binary classification and Neural Network Notation}
+In this section Andrew Ng defines binary classification problem, introduces Logistic Regression and $Sigmoid$ function but more importantly it introduces neural network notation that will be used throughout the course. He emphasizes that neural network notation will be different from the one used in his first Machine Learning course in a way that bias will be kept separately of parameters vector because it is more natural notation when implementing neural net.
+
+For detail notation take a look at the file \textit{neuralnetworknotation.pdf}.
+
+\subsection{Logistic regression cost function}
+We define a \textbf{loss function} as a measurement of how well we are doing on a single training example and \textbf{cost function} of how well we are doing on the entire training set.
+
+Loss function for Logistic regression is:
+
+\begin{align}
+L(y, \hat{y}) = -(y\log{\hat{y}} + (1 - y)\log{(1 - \hat{y})})
+\end{align}
+
+where $\hat{y} = \sigma(w^Tx + b)$ and $\sigma$ is $Sigmoid$ function.
+The questions that pops up is why we simply can't use $L(y, \hat{y}) = \frac{1}{2}(y - \hat{y})$ as a loss function? The answer is that optimization problem that we will encounter will become non-convex and thus gradient descent may converge to local optimum instead of global optimum.
+
+Cost function for Logistic regression is:
+\begin{align}
+J(W, b) = \frac{1}{m}\sum_{i = 1}^{m}(L(y^{(i)}, \hat{y}^{(i)}) = -\frac{1}{m}\sum_{i = 1}^{m}(y^{(i)}\log{\hat{y}^{(i)}} + (1 - y^{(i)})\log{(1 - \hat{y}^{(i)})})
+\end{align}
+
+People usually don't do random initialization for Logistic Regression because cost function is convex and thus the usual way is to simply initialize all the parameters to $0$.
 \end{document}
