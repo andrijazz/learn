@@ -3,7 +3,6 @@
 *.log
 *.aux
 *.synctex.gz
-*.pdf
 
 .idea
 plots/.idea
