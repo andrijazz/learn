@@ -105,8 +105,20 @@ People usually don't do random initialization for Logistic Regression because co
 
 General principle for the python broadcasting is that if you have $(m, n)$ matrix and $(m, 1)$ matrix you would be able to apply any of operations $+, -, *, /$ because second matrix will be automatically extended up to $(m, n)$ by repeating the column $n$ times. Similarly, if you have $(m, n)$ matrix and $(1, n)$ matrix you would be able to apply arithmetic operations because second matrix will be automatically extended up to $(m, n)$ by repeating the raw $m$ times..
   
-\subsection{Logistic regression derivatives}
+\subsection{Explanation of logistic regression cost function}
 
+Our task is to model the probability $p(y|x)$, so we need to come up with the function, lets name it $\hat{y}$, that will satisfy the requirements: when $y = 1$, $p(y|x) = \hat{y}$ and when $y = 0$, $p(y|x) = 1 - \hat{y}$. These 2 cases described $p(y|x)$ so we are now going to try to write $p(y|x)$ in a single equation: 
 
+\begin{align}
+p(y|x) = \hat{y}^y (1 - \hat{y})^{1 - y}
+\end{align}
+
+Since $\log$ is strictly monotonically increasing function, instead of modeling $p(y|x)$ we can model $\log(p(y|x)$ and that would give us the same results. Introducing the log function will give us something like this:
+
+\begin{align}
+\log{p(y|x)} = y\log{\hat{y}} + (1 - y)\log{(1 - \hat{y})}
+\end{align}
+
+In machine learning we usually want to minimize the loss and that means maximizing the $p(y|x)$ and thus we define $L(y, \hat{y}) = -p(y|x)$.
 
 \end{document}

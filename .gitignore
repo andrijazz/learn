@@ -3,6 +3,7 @@
 *.log
 *.aux
 *.synctex.gz
+*.ipynb_checkpoints
 
 .idea/
 
