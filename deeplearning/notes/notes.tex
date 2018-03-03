@@ -92,8 +92,8 @@ Loss function for Logistic regression is:
 L(y, \hat{y}) = -(y\log{\hat{y}} + (1 - y)\log{(1 - \hat{y})})
 \end{align}
 
-where $\hat{y} = \sigma(w^Tx + b)$ and $\sigma$ is $Sigmoid$ function.
-The questions that pops up is why we simply can't use $L(y, \hat{y}) = \frac{1}{2}(y - \hat{y})^2$ as a loss function? The answer is that optimization problem that we will encounter will become non-convex and thus gradient descent may converge to local optimum instead of global optimum.
+where $\hat{y} = \sigma(w^Tx + b)$ and $\sigma$ is $Sigmoid$ function (in literature when we write $\log$ it usually stands for logarithm with the base of $e$).
+	The questions that pops up is why we simply can't use $L(y, \hat{y}) = \frac{1}{2}(y - \hat{y})^2$ as a loss function? The answer is that optimization problem that we will encounter will become non-convex and thus gradient descent may converge to local optimum instead of global optimum.
 
 Cost function for Logistic regression is:
 \begin{align}
@@ -101,4 +101,9 @@ J(W, b) = \frac{1}{m}\sum_{i = 1}^{m}L(y^{(i)}, \hat{y}^{(i)}) = -\frac{1}{m}\su
 \end{align}
 
 People usually don't do random initialization for Logistic Regression because cost function is convex and thus the usual way is to simply initialize all the parameters to $0$.
+
+\subsection{Logistic regression derivatives}
+
+
+
 \end{document}

@@ -7,7 +7,7 @@ def relu(x):
 
 
 x = np.array([-2, -1, 0, 1, 2, 3])
-y = relu(x, 0)
+y = relu(x)
 plt.plot(x, y)
 
 plt.xlabel('x')
