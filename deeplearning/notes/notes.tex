@@ -52,7 +52,7 @@
 \chapter{Neural Networks and Deep Learning}
 
 \section{Introduction to Deep Learning}
-Andrew Ng is introducing $ReLU$ (Rectified Linear Unit) function which is often seen in deep learning literature as an example of the simplest choice for activation function. 
+We are introducing $ReLU$ (Rectified Linear Unit) function which is used as a activation function. 
 \begin{align}
 f(x) =
 	\begin{cases}
@@ -71,7 +71,7 @@ f(x) =
 One of the major breakthroughs in NN computations was introducing $ReLU$ function instead of $Sigmoid$ function $f(x) = \frac{1}{1 + e ^{-x}}$. The advantage of $ReLU$ is that has value $0$ when $x < 0$, where $Sigmoid$ function has values that are close to $0$ and thus making the computation harder.
 Additionally, gradient of $ReLU$ function is equal to $1$ for all positive $x$'s and thus making the gradient descent runs much faster.
 
-Especially interesting in Week 1 of the course was interview with Geoffry Hinton where a lot of interesting ideas were mentioned so it would be really beneficial to watch this video again once student gain more knowledge about different models like Boltzman Machines etc.
+Especially interesting in Week 1 of the course was interview with Geoffrey Hinton where a lot of interesting ideas were mentioned so it would be really beneficial to watch this video again once I gain more knowledge about different models like Boltzman Machines etc.
 
 \section{Neural Network Basics}
 
@@ -92,8 +92,7 @@ Loss function for Logistic regression is:
 L(y, \hat{y}) = -(y\log{\hat{y}} + (1 - y)\log{(1 - \hat{y})})
 \end{align}
 
-where $\hat{y} = \sigma(w^Tx + b)$ and $\sigma$ is $Sigmoid$ function (in literature when we write $\log$ it usually stands for logarithm with the base of $e$).
-	The questions that pops up is why we simply can't use $L(y, \hat{y}) = \frac{1}{2}(y - \hat{y})^2$ as a loss function? The answer is that optimization problem that we will encounter will become non-convex and thus gradient descent may converge to local optimum instead of global optimum.
+where $\hat{y} = \sigma(w^Tx + b)$ and $\sigma$ is $Sigmoid$ function (in literature when we write $\log$ it usually stands for logarithm with the base of $e$). The questions that pops up is why we simply can't use $L(y, \hat{y}) = \frac{1}{2}(y - \hat{y})^2$ as a loss function? The answer is that optimization problem that we will encounter will become non-convex and thus gradient descent may converge to local optimum instead of global optimum.
 
 Cost function for Logistic regression is:
 \begin{align}
