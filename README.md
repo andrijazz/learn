@@ -4,4 +4,4 @@ This repo contains my notes, plots and exercies of various machine learning cour
 
 Run jupyter/datascience-notebook docker:
 
-```docker run -it --rm -p 8888:8888 -v /home/andrijazz/source/andrijazz/notebooks:/home/jovyan/work  jupyter/datascience-notebook```
+```docker run -it --rm -p 8888:8888 -v /your/path/to/repo:/home/jovyan/work  jupyter/datascience-notebook```
