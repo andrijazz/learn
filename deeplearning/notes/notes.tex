@@ -101,6 +101,10 @@ J(W, b) = \frac{1}{m}\sum_{i = 1}^{m}L(y^{(i)}, \hat{y}^{(i)}) = -\frac{1}{m}\su
 
 People usually don't do random initialization for Logistic Regression because cost function is convex and thus the usual way is to simply initialize all the parameters to $0$.
 
+\subsection{Broadcasting in Python}
+
+General principle for the python broadcasting is that if you have $(m, n)$ matrix and $(m, 1)$ matrix you would be able to apply any of operations $+, -, *, /$ because second matrix will be automatically extended up to $(m, n)$ by repeating the column $n$ times. Similarly, if you have $(m, n)$ matrix and $(1, n)$ matrix you would be able to apply arithmetic operations because second matrix will be automatically extended up to $(m, n)$ by repeating the raw $m$ times..
+  
 \subsection{Logistic regression derivatives}
 
 
