@@ -1,0 +1,77 @@
+\documentclass{article}
+\title{Machine learning handbook}
+\author{Andrija Djurisic}
+\date{February 2017}
+
+\usepackage{mathtools}
+
+\begin{document}
+   \maketitle
+\section{Probability and Information Theory}
+
+\textbf{Probability theory} is a mathematical framework for representing uncertain
+statements. It provides a means of quantifying uncertainty and axioms for deriving
+new uncertain statements. In artificial intelligence applications, we use probability
+theory in two major ways. First, the laws of probability tell us how AI systems
+should reason, so we design our algorithms to compute or approximate various
+expressions derived using probability theory. Second, we can use probability and
+statistics to theoretically analyze the behavior of proposed AI systems.
+
+While probability theory allows us to make uncertain statements and reason
+in the presence of uncertainty, \textbf{information theory} allows us to quantify the amount of
+uncertainty in a probability distribution.
+
+\subsection{Random Variables}
+A \textbf{random variable} is a variable that can take on different values randomly. A random variable is just a description of the states that are possible; it must be coupled with a probability distribution that specifies how likely each of these states are. Random variables may be discrete or continuous.
+
+\subsection{Probability Distributions}
+A \textbf{probability distribution} is a description of how likely a random variable or
+set of random variables is to take on each of its possible states. The way we
+describe probability distributions depends on whether the variables are discrete or
+continuous.
+
+\subsubsection{Discrete Variables and Probability Mass Functions}
+A probability distribution over discrete variables may be described using a \textbf{probability
+mass function} (PMF). The probability mass function maps from a state of a random variable to
+the probability of that random variable taking on that state. Probability mass functions can act on many variables at the same time. Such a probability distribution over many variables is known as a joint probability distribution. $P(X = x, Y = y)$ denotes the probability that $X = x$ and $Y = y$
+simultaneously. We may also write $P(x, y)$ for brevity.
+
+To be a probability mass function on a random variable $x$, a function $P$ must
+satisfy the following properties:
+\begin{enumerate}
+\item The domain of $P$ must be the set of all possible states of $X$.
+\item $\forall x \in X, 0 \le P(x) \le 1$
+\item $\sum_{x \in X} P(x) = 1$	
+\end{enumerate}
+\section{Machine Learning Basics}
+\subsection{Support Vector Machines}
+
+We are going to start with logistic regression, and show how we can modify it, and get what is essentially the support vector machine.
+
+\begin{align*}
+J(\theta) &= -\frac{1}{m} \sum_{i = 1}^{m} {y^{(i)}log(h_{\theta}(x^{(i)})) + (1 - y^{(i)}))log(1 - h_{\theta}(x^{(i)}))} + \frac{\lambda}{2m}\sum_{j = 1}^{n}\theta_j^2
+\end{align*}
+
+\noindent
+where $h_{\theta}(x) = \frac{1}{1 - e^{-\theta^{T}x}}$.
+
+\begin{align*}
+J(\theta) &= \frac{1}{m} \sum_{i = 1}^{m} {y^{(i)}(-log(\frac{1}{1 - e^{-\theta^{T}x^{(i)}}})) + (1 - y^{(i)}))(-log(1 - \frac{1}{1 - e^{-\theta^{T}x^{(i)}}}))} + \frac{\lambda}{2m}\sum_{j = 1}^{n}\theta_j^2
+\end{align*}
+
+\noindent
+Notation standard for SVMs is that we define control parameter for general loss instead of parameter for regularization. We can think of parameter $C = \frac{1}{\lambda}$. 
+
+\begin{align*}
+J(\theta) &= \frac{C}{m} \sum_{i = 1}^{m} {y^{(i)}(-log(\frac{1}{1 - e^{-\theta^{T}x^{(i)}}})) + (1 - y^{(i)}))(-log(1 - \frac{1}{1 - e^{-\theta^{T}x^{(i)}}}))} + \frac{1}{2m}\sum_{j = 1}^{n}\theta_j^2
+\end{align*}
+
+\section{Definitions}
+\begin{itemize}
+\item A \textbf{deterministic system} is a system in which no randomness is involved in the development of future states of the system. A deterministic model will thus always produce the same output from a given starting condition or initial state.
+
+\item \textbf{Probability} is the measure of the likelihood that an event will occur.
+
+\item \textbf{Stochastic} or random.  
+\end{itemize}
+\end{document}
