@@ -26,8 +26,7 @@ def load_dataset():
 def plot_sample(X, y, sample):
     plt.imshow(X[sample])
     plt.show()
-    print ("y = " + str(y[:, sample]) +
-           ", it's a '" + classes[np.squeeze(y[:, sample])].decode("utf-8") + "' picture.")
+    print("y = {} , it's a {} picture".format(str(y[sample][0]), classes[np.squeeze(y[sample][0])].decode("utf-8")))
 
 
 def sigmoid(z):
@@ -59,8 +58,8 @@ def initialize_with_zeros(dim):
 def propagate(W, b, X, y):
     m = X.shape[0]
     h = sigmoid(np.dot(X, W) + b)
-    J = -(1 / m) * np.sum(y * np.log(h) - (1 - y) * np.log(1 - h))
-    dW = np.dot(X, (h - y).T) / m
+    J = -(1.0 / m) * np.sum(y * np.log(h) - (1 - y) * np.log(1 - h))
+    dW = np.dot((h-y).T, X).T / m
     db = np.sum(h - y) / m
 
     assert (dW.shape == W.shape)
@@ -74,12 +73,12 @@ def propagate(W, b, X, y):
     return grads, cost
 
 
-def optimize(w, b, X, Y, num_iterations, learning_rate, print_cost=False):
+def optimize(W, b, X, Y, num_iterations, learning_rate, print_cost=True):
     """
     This function optimizes w and b by running a gradient descent algorithm
 
     Arguments:
-    w -- weights, a numpy array of size (num_px * num_px * 3, 1)
+    W -- weights, a numpy array of size (num_px * num_px * 3, 1)
     b -- bias, a scalar
     X -- data of shape (num_px * num_px * 3, number of examples)
     Y -- true "label" vector (containing 0 if non-cat, 1 if cat), of shape (1, number of examples)
@@ -102,18 +101,16 @@ def optimize(w, b, X, Y, num_iterations, learning_rate, print_cost=False):
 
     for i in range(num_iterations):
 
-        # Cost and gradient calculation (≈ 1-4 lines of code)
         ### START CODE HERE ###
-        grads, cost = propagate(w, b, X, Y)
+        grads, cost = propagate(W, b, X, Y)
         ### END CODE HERE ###
 
         # Retrieve derivatives from grads
-        dw = grads["dw"]
+        dW = grads["dW"]
         db = grads["db"]
 
-        # update rule (≈ 2 lines of code)
         ### START CODE HERE ###
-        w = w - learning_rate * dw
+        W = W - learning_rate * dW
         b = b - learning_rate * db
         ### END CODE HERE ###
 
@@ -123,12 +120,12 @@ def optimize(w, b, X, Y, num_iterations, learning_rate, print_cost=False):
 
         # Print the cost every 100 training iterations
         if print_cost and i % 100 == 0:
-            print ("Cost after iteration %i: %f" % (i, cost))
+            print ("Cost after iteration {}: {}".format(i, cost))
 
-    params = {"w": w,
+    params = {"W": W,
               "b": b}
 
-    grads = {"dw": dw,
+    grads = {"dW": dW,
              "db": db}
 
     return params, grads, costs
@@ -147,29 +144,27 @@ def predict(w, b, X):
     Y_prediction -- a numpy array (vector) containing all predictions (0/1) for the examples in X
     '''
 
-    m = X.shape[1]
-    Y_prediction = np.zeros((1, m))
-    w = w.reshape(X.shape[0], 1)
+    m = X.shape[0]
+    Y_prediction = np.zeros((m, 1))
 
     # Compute vector "A" predicting the probabilities of a cat being present in the picture
-    ### START CODE HERE ### (≈ 1 line of code)
-    A = sigmoid(np.dot(w.T, X) + b)
+    A = sigmoid(np.dot(X, w) + b)
     ### END CODE HERE ###
 
-    for i in range(A.shape[1]):
+    for i in range(A.shape[0]):
 
         # Convert probabilities A[0,i] to actual predictions p[0,i]
-        ### START CODE HERE ### (≈ 4 lines of code)
-        if A[0, i] > 0.5:
-            Y_prediction[0, i] = 1
+        if A[i, 0] > 0.5:
+            Y_prediction[i, 0] = 1
         else:
-            Y_prediction[0, i] = 0
+            Y_prediction[i, 0] = 0
         pass
         ### END CODE HERE ###
 
-    assert (Y_prediction.shape == (1, m))
+    assert (Y_prediction.shape == (m, 1))
 
     return Y_prediction
+
 # load
 train_X, train_y, test_X, test_y, classes = load_dataset()
 
@@ -182,11 +177,16 @@ m_train = train_X.shape[0]
 train_X_flatten = train_X.reshape(m_train, train_X.shape[1] * train_X.shape[2] * train_X.shape[3])
 m_test = test_X.shape[0]
 test_X_flatten = test_X.reshape(m_test, test_X.shape[1] * test_X.shape[2] * test_X.shape[3])
-n = train_X.shape[0]
+n = train_X_flatten.shape[1]
 
 # normalize
-train_X = train_X_flatten / 255
-test_X = test_X_flatten / 255
+train_X_normalized = train_X_flatten.astype(np.float32) / 255
+test_X_normalized = test_X_flatten.astype(np.float32) / 255
 
 W, b = initialize_with_zeros(n)
 
+params, grads, costs = optimize(W, b, train_X_normalized, train_y, num_iterations=10000, learning_rate=0.0005)
+np.save('weights', params)
+
+predicted_test_y = predict(params["W"], params["b"], test_X_normalized)
+print("Accuracy = {}".format(np.sum(predicted_test_y == test_y).astype(np.float32)/test_y.shape[0]))
