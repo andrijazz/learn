@@ -1,6 +1,4 @@
-## ML courses
-
-This repo contains my notes, plots and exercies of various machine learning courses.
+This repo contains my notes, plots and exercies of various machine learning courses, lectures, talks etc..
 
 Run jupyter/datascience-notebook docker:
 
