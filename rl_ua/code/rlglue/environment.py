@@ -25,7 +25,7 @@ class BaseEnvironment:
         self.reward_obs_term = (reward, observation, termination)
 
     @abstractmethod
-    def env_init(self, env_info={}):
+    def env_init(self, env_info=None):
         """Setup for the environment called when the experiment first starts.
 
         Note:

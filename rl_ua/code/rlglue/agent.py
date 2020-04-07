@@ -20,7 +20,7 @@ class BaseAgent:
         pass
 
     @abstractmethod
-    def agent_init(self, agent_info= {}):
+    def agent_init(self, agent_info=None):
         """Setup for the agent called when the experiment first starts."""
 
     @abstractmethod
