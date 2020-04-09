@@ -9,6 +9,7 @@ verify_ssl = true
 matplotlib = "*"
 numpy = "*"
 tqdm = "*"
+ipython = "*"
 
 [requires]
 python_version = "3.6"
