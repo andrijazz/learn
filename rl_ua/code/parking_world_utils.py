@@ -52,6 +52,8 @@ def plot(V, pi):
     fig.subplots_adjust(wspace=0.5)
     display.clear_output(wait=True)
     display.display(fig)
+    plt.savefig('output.png')
+
     time.sleep(0.001)
     plt.close()
 
