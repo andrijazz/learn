@@ -1,6 +1,7 @@
 from rl_glue import RLGlue
 from random_agent import RandomAgent
 from greedy_agent import GreedyAgent
+from eps_greedy_agent import EpsGreedyAgent
 from ten_arm_env import TenArmEnviroment
 import numpy as np
 import tqdm
@@ -13,7 +14,8 @@ def run(agent_class):
     }
 
     agent_init = {
-        'actions': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        'actions': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+        'eps': 0.1
     }
 
     num_runs = 200
@@ -49,11 +51,14 @@ def run(agent_class):
 
 greedy_avgs = run(GreedyAgent)
 random_avgs = run(RandomAgent)
+eps_avgs = run(EpsGreedyAgent)
 
 plt.figure(figsize=(15, 5), dpi=80, facecolor='w', edgecolor='k')
 # plt.plot([1.55 for _ in range(num_steps)], linestyle="--")
 plt.plot(np.mean(random_avgs, axis=0), color='blue')
 plt.plot(np.mean(greedy_avgs, axis=0), color='orange')
+plt.plot(np.mean(eps_avgs, axis=0), color='red')
+
 plt.title("Average Reward of Agents")
 plt.xlabel("Steps")
 plt.ylabel("Average reward")
