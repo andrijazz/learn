@@ -232,7 +232,7 @@ def test_td_updates():
     # where there is only one action. The state's current value estimate is 0.
     # Note the discount and step size if you are debugging this test.
     agent = TDAgent()
-    policy_list = np.array([[1.]])
+    policytrace_list = np.array([[1.]])
     agent.agent_init({"policy": np.array(policy_list), "discount": 0.99, "step_size": 0.1})
     agent.values = np.array([0.])
     agent.agent_start(0)
