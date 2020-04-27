@@ -4,7 +4,7 @@ from base_agent import BaseAgent
 from utils import argmax
 
 
-class Easy21MonteCarloAgent(BaseAgent):
+class MonteCarloAgent(BaseAgent):
     def __init__(self, agent_settings=None):
         super().__init__(agent_settings)
         self.actions = agent_settings['actions']
@@ -20,7 +20,7 @@ class Easy21MonteCarloAgent(BaseAgent):
         # total reward over a single episode
         self.G = 0
 
-        # uniform distribution
+        # eps parameter
         self.n0 = 100.
 
     def start(self, state):

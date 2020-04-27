@@ -1,10 +1,12 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 from easy21_environment import Easy21Environment
-from easy21_mc_agent import Easy21MonteCarloAgent
+from monte_carlo_agent import MonteCarloAgent
 from greedy_agent import GreedyAgent
 from random_agent import RandomAgent
 from human_agent import HumanAgent
+from sarsa_agent import SarsaAgent
 
 
 def episode(env, agent, train=True):
@@ -23,13 +25,25 @@ def episode(env, agent, train=True):
         history.append((state, action, agent.G))
 
         if done:
+            delta = reward - agent.Q[agent.last_state[0], agent.last_state[1], agent.last_action]
+            agent.E[agent.last_state[0], agent.last_state[1], agent.last_action] = agent.E[agent.last_state[0], agent.last_state[1], agent.last_action] + 1
+
+            for i in range(agent.N.shape[0]):
+                for j in range(agent.N.shape[1]):
+                    for k in range(agent.N.shape[2]):
+                        if agent.N[i, j, k] > 0:
+                            alpha_t = 1. / agent.N[i, j, k]
+                            agent.Q[i, j, k] = agent.Q[i, j, k] + alpha_t * delta * agent.E[i, j, k]
+                            agent.E[i, j, k] = agent.lambd * agent.E[i, j, k]
+
             break
 
         action = agent.step(new_state, reward)
         state = new_state
+
         # print(action)
 
-    if isinstance(agent, Easy21MonteCarloAgent) and train:
+    if isinstance(agent, MonteCarloAgent) and train:
         agent.monte_carlo_update(history)
 
     env.end()
@@ -66,24 +80,35 @@ def test(agent):
 
 def main():
     # train
-    num_episodes = 1000000
+    num_episodes = 50000
     env = Easy21Environment()
-    agent = Easy21MonteCarloAgent({'actions': ['hit', 'stick']})
+    # agent = MonteCarloAgent({'actions': ['hit', 'stick']})
 
+    Q = np.load('Q_star.npy')
+    agent = SarsaAgent({'actions': ['hit', 'stick'], 'lambd': 0.1})
+    diff = list()
     for i in range(num_episodes):
         episode(env, agent)
+        if i % 1000 == 0:
+            mse = np.sum(np.square(agent.Q - Q))
+            diff.append(mse)
+
+    plt.plot(diff)
+    plt.ylabel('mse')
+    plt.show()
+    # np.save('Q_star.npy', agent.Q)
 
     # test
     # test(agent)
 
-    random_agent = RandomAgent({'actions': ['hit', 'stick']})
-    greedy_agent = GreedyAgent({'actions': ['hit', 'stick']})
-    human_agent = HumanAgent({'actions': ['hit', 'stick']})
-    greedy_agent.Q = agent.Q
-    play(env, random_agent)
-    play(env, human_agent)
-    play(env, agent)
-    play(env, greedy_agent)
+    # random_agent = RandomAgent({'actions': ['hit', 'stick']})
+    # greedy_agent = GreedyAgent({'actions': ['hit', 'stick']})
+    # human_agent = HumanAgent({'actions': ['hit', 'stick']})
+    # greedy_agent.Q = agent.Q
+    # play(env, random_agent)
+    # play(env, human_agent)
+    # play(env, agent)
+    # play(env, greedy_agent)
 
 
 if __name__ == "__main__":
