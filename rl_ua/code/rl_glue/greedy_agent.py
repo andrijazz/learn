@@ -1,7 +1,7 @@
 import numpy as np
 import utils
 
-from agent import BaseAgent
+from rl_glue.agent import BaseAgent
 
 
 class GreedyAgent(BaseAgent):

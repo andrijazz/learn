@@ -1,8 +1,8 @@
-from rl_glue import RLGlue
-from random_agent import RandomAgent
-from greedy_agent import GreedyAgent
-from eps_greedy_agent import EpsGreedyAgent
-from ten_arm_env import TenArmEnviroment
+from rl_glue.rl_glue import RLGlue
+from rl_glue.random_agent import RandomAgent
+from rl_glue.greedy_agent import GreedyAgent
+from rl_glue.eps_greedy_agent import EpsGreedyAgent
+from rl_glue.ten_arm_env import TenArmEnviroment
 import numpy as np
 import tqdm
 import matplotlib.pyplot as plt

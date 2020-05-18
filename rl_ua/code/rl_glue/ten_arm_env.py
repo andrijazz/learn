@@ -1,5 +1,5 @@
 import numpy as np
-from environment import BaseEnvironment
+from rl_glue.environment import BaseEnvironment
 
 
 class TenArmEnviroment(BaseEnvironment):

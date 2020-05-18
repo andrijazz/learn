@@ -2,9 +2,9 @@ from operator import add
 
 import numpy as np
 
-from agent import BaseAgent
-from environment import BaseEnvironment
-from rl_glue import RLGlue
+from rl_glue.agent import BaseAgent
+from rl_glue.environment import BaseEnvironment
+from rl_glue.rl_glue import RLGlue
 from manager import Manager
 
 
