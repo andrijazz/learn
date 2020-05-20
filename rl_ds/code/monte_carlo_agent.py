@@ -4,6 +4,33 @@ from base_agent import BaseAgent
 from utils import argmax
 
 
+def monte_carlo_episode(env, agent):
+    history = list()
+
+    state = env.start()
+    action = agent.start(state)
+
+    while True:
+        reward, new_state, done = env.step(action)
+
+        # collect reward
+        agent.total_reward += reward
+        history.append((state, action, reward))
+
+        if done:
+            break
+
+        action = agent.step(new_state, reward)
+        state = new_state
+
+    agent.monte_carlo_update(history)
+
+    env.end()
+    agent.end()
+    # last reward is result of the game
+    return reward
+
+
 class MonteCarloAgent(BaseAgent):
     def __init__(self, agent_settings=None):
         super().__init__(agent_settings)
@@ -18,10 +45,13 @@ class MonteCarloAgent(BaseAgent):
         self.Q = np.zeros((11, 22, len(self.actions)))
 
         # total reward over a single episode
-        self.G = 0
+        self.total_reward = 0
 
         # eps parameter
         self.n0 = 100.
+
+        # gamma
+        self.gamma = 1
 
     def start(self, state):
         """
@@ -75,11 +105,13 @@ class MonteCarloAgent(BaseAgent):
         """
 
         # reset total reward over an episode
-        self.G = 0
+        self.total_reward = 0
 
     def monte_carlo_update(self, history):
         # Monte Carlo computations
-        for (state, action, G) in history:
+        G = 0
+        for (state, action, reward) in reversed(history):
+            G = self.gamma * G + reward
             a = self.actions.index(action)
             alpha_t = 1. / self.N[state[0], state[1], a]
             self.Q[state[0], state[1], a] = self.Q[state[0], state[1], a] + alpha_t * (G - self.Q[state[0], state[1], a])
