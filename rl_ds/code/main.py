@@ -1,12 +1,34 @@
 from easy21_environment import Easy21Environment
-from monte_carlo_agent import MonteCarloAgent, monte_carlo_episode
-from random_agent import RandomAgent, episode
+from greedy_agent import GreedyAgent
 from human_agent import HumanAgent
+from monte_carlo_agent import MonteCarloAgent, monte_carlo_episode
+from random_agent import RandomAgent
 
 
 def training(env, agent, episode_fn, num_episodes=50000):
     for i in range(num_episodes):
         episode_fn(env, agent)
+
+
+def episode(env, agent):
+    state = env.start()
+    action = agent.start(state)
+    while True:
+        reward, new_state, done = env.step(action)
+
+        # collect reward
+        agent.total_reward += reward
+
+        if done:
+            break
+
+        action = agent.step(new_state, reward)
+
+    env.end()
+    agent.end()
+
+    # last reward is result of the game
+    return reward
 
 
 def testing(env, agent, episode_fn, num_episodes=10000):
@@ -28,15 +50,16 @@ def main():
     env = Easy21Environment()
 
     # training
-    mc_agent = MonteCarloAgent({'actions': ['hit', 'stick']})
+    mc_agent = MonteCarloAgent(agent_settings={'actions': ['hit', 'stick']})
     training(env, mc_agent, monte_carlo_episode)
 
     # test agents
-    random_agent = RandomAgent({'actions': ['hit', 'stick']})
-    human_agent = HumanAgent({'actions': ['hit', 'stick']})
+    greedy_mc_agent = GreedyAgent(mc_agent.Q, agent_settings={'actions': ['hit', 'stick']})
+    random_agent = RandomAgent(agent_settings={'actions': ['hit', 'stick']})
+    human_agent = HumanAgent(agent_settings={'actions': ['hit', 'stick']})
 
     # testing
-    testing(env, mc_agent, monte_carlo_episode)
+    testing(env, greedy_mc_agent, episode)
     testing(env, random_agent, episode)
     testing(env, human_agent, episode)
 

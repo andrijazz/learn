@@ -1,15 +1,13 @@
-import numpy as np
-
 from base_agent import BaseAgent
 from utils import argmax
 
 
 class GreedyAgent(BaseAgent):
-    def __init__(self, agent_settings=None):
+    def __init__(self, Q, agent_settings=None):
         super().__init__(agent_settings)
         self.actions = agent_settings['actions']
-        self.Q = None
-        self.G = 0
+        self.Q = Q
+        self.total_reward = 0
 
     def start(self, state):
         """
@@ -39,4 +37,4 @@ class GreedyAgent(BaseAgent):
         Cleans up the agent properties
         :return:
         """
-        self.G = 0
+        self.total_reward = 0
