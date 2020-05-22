@@ -4,7 +4,7 @@ from base_agent import BaseAgent
 from utils import argmax
 
 
-def monte_carlo_episode(env, agent):
+def episode(env, agent):
     history = list()
 
     state = env.start()
@@ -18,7 +18,7 @@ def monte_carlo_episode(env, agent):
         history.append((state, action, reward))
 
         if done:
-            agent.monte_carlo_update(history)
+            agent.update(history)
             break
 
         action = agent.step(new_state, reward)
@@ -106,7 +106,7 @@ class MonteCarloAgent(BaseAgent):
         # reset total reward over an episode
         self.total_reward = 0
 
-    def monte_carlo_update(self, history):
+    def update(self, history):
         # Monte Carlo computations
         G = 0
         for (state, action, reward) in reversed(history):

@@ -4,28 +4,7 @@ from base_agent import BaseAgent
 from utils import argmax
 
 
-def episode(env, agent):
-    state = env.start()
-    action = agent.start(state)
-
-    while True:
-        reward, state, done = env.step(action)
-        agent.total_reward += reward
-
-        if done:
-            agent.update(agent.last_state, agent.last_action, reward, state, None)
-            break
-
-        action = agent.step(state, reward)
-
-    env.end()
-    agent.end()
-
-    # last reward is result of the game
-    return reward
-
-
-class SarsaAgent(BaseAgent):
+class QLearningAgent(BaseAgent):
     def __init__(self, agent_settings=None):
         super().__init__(agent_settings)
         self.actions = agent_settings['actions']
@@ -77,16 +56,19 @@ class SarsaAgent(BaseAgent):
         :param reward:
         :return: next action
         """
+        q_hit = self.Q[state[0], state[1], 0]
+        q_stick = self.Q[state[0], state[1], 1]
+
         rand = np.random.uniform()
         eps = self.n0 / (self.n0 + (self.N[state[0], state[1], 0] + self.N[state[0], state[1], 1]))
         if rand > eps:    # be greedy
-            q_hit = self.Q[state[0], state[1], 0]
-            q_stick = self.Q[state[0], state[1], 1]
             action = argmax([q_hit, q_stick])
         else:   # explore by taking random action
             action = np.random.choice(len(self.actions))
 
-        self.update(self.last_state, self.last_action, reward, state, action)
+        target_action = argmax([q_hit, q_stick])
+
+        self.update(self.last_state, self.last_action, reward, state, target_action)
 
         self.N[state[0], state[1], action] = self.N[state[0], state[1], action] + 1
         self.last_state = state
