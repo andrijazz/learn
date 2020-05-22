@@ -3,6 +3,7 @@ from greedy_agent import GreedyAgent
 from human_agent import HumanAgent
 from monte_carlo_agent import MonteCarloAgent, monte_carlo_episode
 from random_agent import RandomAgent
+from sarsa_agent import SarsaAgent, sarsa_episode
 
 
 def training(env, agent, episode_fn, num_episodes=50000):
@@ -51,15 +52,20 @@ def main():
 
     # training
     mc_agent = MonteCarloAgent(agent_settings={'actions': ['hit', 'stick']})
-    training(env, mc_agent, monte_carlo_episode)
+    training(env, mc_agent, monte_carlo_episode, num_episodes=100000)
+
+    sarsa_agent = SarsaAgent(agent_settings={'actions': ['hit', 'stick'], 'lambd': 0.1})
+    training(env, sarsa_agent, sarsa_episode, num_episodes=100000)
 
     # test agents
     greedy_mc_agent = GreedyAgent(mc_agent.Q, agent_settings={'actions': ['hit', 'stick']})
+    greedy_sarsa_agent = GreedyAgent(sarsa_agent.Q, agent_settings={'actions': ['hit', 'stick']})
     random_agent = RandomAgent(agent_settings={'actions': ['hit', 'stick']})
     human_agent = HumanAgent(agent_settings={'actions': ['hit', 'stick']})
 
     # testing
     testing(env, greedy_mc_agent, episode)
+    testing(env, greedy_sarsa_agent, episode)
     testing(env, random_agent, episode)
     testing(env, human_agent, episode)
 

@@ -4,6 +4,27 @@ from base_agent import BaseAgent
 from utils import argmax
 
 
+def sarsa_episode(env, agent):
+    state = env.start()
+    action = agent.start(state)
+
+    while True:
+        reward, state, done = env.step(action)
+        agent.total_reward += reward
+
+        if done:
+            agent.sarsa_update(agent.last_state, agent.last_action, reward, state, None)
+            break
+
+        action = agent.step(state, reward)
+
+    env.end()
+    agent.end()
+
+    # last reward is result of the game
+    return reward
+
+
 class SarsaAgent(BaseAgent):
     def __init__(self, agent_settings=None):
         super().__init__(agent_settings)
@@ -20,7 +41,7 @@ class SarsaAgent(BaseAgent):
         self.N = np.zeros((11, 22, len(self.actions)))
 
         # total reward over a single episode
-        self.G = 0
+        self.total_reward = 0
         # last visited state
         self.last_state = None
         # last action taken
@@ -65,20 +86,9 @@ class SarsaAgent(BaseAgent):
         else:   # explore by taking random action
             action = np.random.choice(len(self.actions))
 
+        self.sarsa_update(self.last_state, self.last_action, reward, state, action)
+
         self.N[state[0], state[1], action] = self.N[state[0], state[1], action] + 1
-
-        # do updates
-        delta = reward + self.gamma * self.Q[state[0], state[1], action] - self.Q[self.last_state[0], self.last_state[1], self.last_action]
-        self.E[self.last_state[0], self.last_state[1], self.last_action] = self.E[self.last_state[0], self.last_state[1], self.last_action] + 1
-
-        for i in range(self.N.shape[0]):
-            for j in range(self.N.shape[1]):
-                for k in range(self.N.shape[2]):
-                    if self.N[i, j, k] > 0:
-                        alpha_t = 1. / self.N[i, j, k]
-                        self.Q[i, j, k] = self.Q[i, j, k] + alpha_t * delta * self.E[i, j, k]
-                        self.E[i, j, k] = self.lambd * self.E[i, j, k]
-
         self.last_state = state
         self.last_action = action
         return self.actions[action]
@@ -88,6 +98,25 @@ class SarsaAgent(BaseAgent):
         Cleans up the agent properties
         :return:
         """
-        self.G = 0
+        self.total_reward = 0
         self.last_state = None
         self.last_action = None
+
+    def sarsa_update(self, s, a, r, s_p, a_p):
+        if a_p is None:
+            delta = r - self.Q[s[0], s[1], a]
+        else:
+            delta = r + self.gamma * self.Q[s_p[0], s_p[1], a_p] - self.Q[s[0], s[1], a]
+
+        self.E[s[0], s[1], a] = self.E[s[0], s[1], a] + 1
+        alpha_t = 1. / self.N[s[0], s[1], a]
+        self.Q[s[0], s[1], a] = self.Q[s[0], s[1], a] + alpha_t * delta * self.E[s[0], s[1], a]
+        self.E[s[0], s[1], a] = self.lambd * self.E[s[0], s[1], a]
+
+        # for i in range(self.N.shape[0]):
+        #     for j in range(self.N.shape[1]):
+        #         for k in range(self.N.shape[2]):
+        #             if self.N[i, j, k] > 0:
+        #                 alpha_t = 1. / self.N[i, j, k]
+        #                 self.Q[i, j, k] = self.Q[i, j, k] + alpha_t * delta * self.E[i, j, k]
+        #                 self.E[i, j, k] = self.lambd * self.E[i, j, k]

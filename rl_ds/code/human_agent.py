@@ -32,10 +32,10 @@ class HumanAgent(BaseAgent):
         :param reward:
         :return: next action
         """
-        if state[1] < 12:
-            return self.actions[0]
+        # if state[1] <= 11:
+        #     return self.actions[0]
 
-        if state[1] > 18:
+        if state[1] >= 20:
             return self.actions[1]
 
         action = np.random.choice(self.actions)

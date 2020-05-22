@@ -18,12 +18,11 @@ def monte_carlo_episode(env, agent):
         history.append((state, action, reward))
 
         if done:
+            agent.monte_carlo_update(history)
             break
 
         action = agent.step(new_state, reward)
         state = new_state
-
-    agent.monte_carlo_update(history)
 
     env.end()
     agent.end()
