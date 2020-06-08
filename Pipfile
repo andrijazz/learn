@@ -10,6 +10,7 @@ matplotlib = "*"
 numpy = "*"
 tqdm = "*"
 ipython = "*"
+gym = "*"
 
 [requires]
 python_version = "3.6"

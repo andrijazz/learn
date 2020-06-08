@@ -33,7 +33,7 @@ def episode(env, agent):
     return reward
 
 
-def testing(env, agent, episode_fn, num_episodes=10000):
+def testing(env, agent, episode_fn, num_episodes=10000, name=None):
     won = 0
     lose = 0
     draw = 0
@@ -45,7 +45,10 @@ def testing(env, agent, episode_fn, num_episodes=10000):
             lose += 1
         else:
             draw += 1
-    print('{} - Won {} / Draw {} / Lose {}'.format(agent.__class__.__name__, won, draw, lose))
+
+    if name is None:
+        name = agent.__class__.__name__
+    print('{} - Won {} / Draw {} / Lose {}'.format(name, won, draw, lose))
 
 
 def main():
@@ -69,9 +72,9 @@ def main():
     human_agent = HumanAgent(agent_settings={'actions': ['hit', 'stick']})
 
     # testing
-    testing(env, greedy_mc_agent, episode)
-    testing(env, greedy_sarsa_agent, episode)
-    testing(env, greedy_q_agent, episode)
+    testing(env, greedy_mc_agent, episode, name="MonteCarlo")
+    testing(env, greedy_sarsa_agent, episode, name="Sarsa")
+    testing(env, greedy_q_agent, episode, name="QLearning")
     testing(env, random_agent, episode)
     testing(env, human_agent, episode)
 

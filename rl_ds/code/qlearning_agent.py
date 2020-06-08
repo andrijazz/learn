@@ -94,11 +94,3 @@ class QLearningAgent(BaseAgent):
         alpha_t = 1. / self.N[s[0], s[1], a]
         self.Q[s[0], s[1], a] = self.Q[s[0], s[1], a] + alpha_t * delta * self.E[s[0], s[1], a]
         self.E[s[0], s[1], a] = self.lambd * self.E[s[0], s[1], a]
-
-        # for i in range(self.N.shape[0]):
-        #     for j in range(self.N.shape[1]):
-        #         for k in range(self.N.shape[2]):
-        #             if self.N[i, j, k] > 0:
-        #                 alpha_t = 1. / self.N[i, j, k]
-        #                 self.Q[i, j, k] = self.Q[i, j, k] + alpha_t * delta * self.E[i, j, k]
-        #                 self.E[i, j, k] = self.lambd * self.E[i, j, k]
