@@ -5,7 +5,10 @@
 *.synctex.gz
 *.ipynb_checkpoints
 *.pyc
+*.zip
+
 .idea/
 
 *videos
 *runs
+*results
